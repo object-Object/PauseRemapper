@@ -30,20 +30,19 @@ jobs:
       run: |
         echo "$ANDROID_NDK_LATEST_HOME" > ${GITHUB_WORKSPACE}/ndkpath.txt
         cat ${GITHUB_WORKSPACE}/ndkpath.txt
+
     - name: Get QPM
-      # if: steps.cache-qpm.outputs.cache-hit != 'true'
-      uses: dawidd6/action-download-artifact@v2
+      uses: Fernthedev/qpm-action@v1
       with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        workflow: cargo-build.yml
-        name: linux-qpm
-        path: QPM
-        repo: QuestPackageManager/QPM.CLI
+        workflow_token: ${{ secrets.GITHUB_TOKEN }}
+        restore: true
+        cache: true
+        publish: false
+        qpm_version: 'version@1.4.1'
         
     - name: QPM Collapse
       run: |
-        chmod +x ./QPM/qpm
-        ./QPM/qpm collapse
+        qpm collapse
     
     - name: QPM Dependencies Cache
       id: cache-qpm-deps
@@ -59,7 +58,7 @@ jobs:
           ${{ runner.os }}-
     - name: QPM Restore
       run: |
-        ./QPM/qpm restore
+        qpm restore
     - name: List Post Restore
       run: |
         echo includes:
@@ -72,7 +71,7 @@ jobs:
     - name: Build
       run: |
         cd ${GITHUB_WORKSPACE}
-        ./QPM/qpm qmod build
+        qpm qmod build
         pwsh -Command ./build.ps1
     - name: Create Qmod
       run: |
