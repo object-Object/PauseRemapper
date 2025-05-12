@@ -35,7 +35,7 @@ jobs:
       uses: Fernthedev/qpm-action@v1
       with:
         workflow_token: ${{ secrets.GITHUB_TOKEN }}
-        restore: true
+        restore: false
         cache: true
         publish: false
         qpm_version: 'version@1.4.1'
