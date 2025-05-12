@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       name: Checkout
       with:
         submodules: true
@@ -30,15 +30,15 @@ jobs:
       run: |
         echo "$ANDROID_NDK_LATEST_HOME" > ${GITHUB_WORKSPACE}/ndkpath.txt
         cat ${GITHUB_WORKSPACE}/ndkpath.txt
-    - name: Get QPM
-      if: steps.cache-qpm.outputs.cache-hit != 'true'
-      uses: dawidd6/action-download-artifact@v2
-      with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        workflow: cargo-build.yml
-        name: linux-qpm
-        path: QPM
-        repo: QuestPackageManager/QPM.CLI
+    # - name: Get QPM
+    #   if: steps.cache-qpm.outputs.cache-hit != 'true'
+    #   uses: dawidd6/action-download-artifact@v2
+    #   with:
+    #     github_token: ${{secrets.GITHUB_TOKEN}}
+    #     workflow: cargo-build.yml
+    #     name: linux-qpm
+    #     path: QPM
+    #     repo: QuestPackageManager/QPM.CLI
         
     - name: QPM Collapse
       run: |
@@ -47,7 +47,7 @@ jobs:
     
     - name: QPM Dependencies Cache
       id: cache-qpm-deps
-      uses: actions/cache@v2
+      uses: actions/cache@v4
       env:
         cache-name: cache-qpm-deps
       with:
@@ -86,14 +86,14 @@ jobs:
         echo ::set-output name=NAME::"${files[0]}"
     
     - name: Upload so artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ steps.libname.outputs.NAME }}
         path: ./build/${{ steps.libname.outputs.NAME }}
         if-no-files-found: error
 
     - name: Upload qmod artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: ${{env.qmodName}}.qmod
         path: ./${{ env.qmodName }}.qmod
