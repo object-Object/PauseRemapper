@@ -18,9 +18,11 @@ using namespace UnityEngine;
 
 static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 
-PAUSE_REMAPPER_EXPORT_FUNC void setup(CModInfo* info)
+PAUSE_REMAPPER_EXPORT_FUNC void setup(CModInfo& info)
 {
-    *info = modInfo.to_c();
+    info.id = MOD_ID;
+    info.version = VERSION;
+    modInfo.assign(info);
     INFO("Completed setup!");
 }
 
